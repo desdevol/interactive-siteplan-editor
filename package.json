@@ -9,7 +9,9 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@quasar/extras": "^1.0.0",
     "core-js": "^3.6.5",
+    "quasar": "^2.0.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
@@ -26,9 +28,10 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0",
-    "sass": "^1.26.5",
-    "sass-loader": "^8.0.2",
+    "sass": "1.32.12",
+    "sass-loader": "^12.0.0",
     "typescript": "~3.9.3",
+    "vue-cli-plugin-quasar": "~5.0.1",
     "vue-jest": "^5.0.0-0"
   }
 }
