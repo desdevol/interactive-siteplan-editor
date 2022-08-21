@@ -11,12 +11,15 @@
   "dependencies": {
     "@geoman-io/leaflet-geoman-free": "^2.13.0",
     "@quasar/extras": "^1.0.0",
+    "@vueuse/core": "^9.1.0",
     "core-js": "^3.6.5",
     "fuse.js": "^6.6.2",
     "leaflet": "^1.8.0",
+    "lodash": "^4.17.21",
     "quasar": "^2.0.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
+    "vue-virtual-scroller": "^2.0.0-alpha.1",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
