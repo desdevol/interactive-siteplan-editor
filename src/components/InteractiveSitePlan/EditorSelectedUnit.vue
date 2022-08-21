@@ -58,7 +58,7 @@ export default {
   },
   watch: {},
   created: function () {},
-  beforeDestroy: function () {},
+  beforeUnmount: function () {},
   mounted: function () {},
   methods: {
     ...mapMutations({
