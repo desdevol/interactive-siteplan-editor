@@ -69,14 +69,6 @@ export default {
             plot: "",
         },
         isUnitListInitializing: false,
-        changeStatusModal: {
-            isShown: false,
-            unit: null,
-        },
-        changePriceModal: {
-            isShown: false,
-            unit: null,
-        },
 
         mode: "create",
         projectUnitTypeAPI: null,
@@ -135,11 +127,7 @@ export default {
         },
         setSelectedLayerUnitId(state, unitId) {
             if (state.selectedLayer) {
-                this._vm.$set(
-                    state.selectedLayer.feature.properties,
-                    "unitId",
-                    unitId
-                );
+                state.selectedLayer.feature.properties.unitId = unitId;
             }
         },
         removeSelectedLayerUnitId(state) {

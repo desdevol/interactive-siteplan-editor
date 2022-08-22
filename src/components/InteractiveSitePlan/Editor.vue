@@ -6,9 +6,9 @@
                 <editor-map
                     :style="{ height: 'calc(100% - 72px)' }"
                 ></editor-map>
-                <!-- <div :style="{ position: 'relative', zIndex: 401 }">
+                <div :style="{ position: 'relative', zIndex: 401 }">
                     <editor-selected-unit></editor-selected-unit>
-                </div> -->
+                </div>
             </div>
             <editor-pane class="col-3"></editor-pane>
         </div>
@@ -23,7 +23,7 @@ export default {
     components: {
         EditorMap,
         EditorPane,
-        // EditorSelectedUnit: () => import("./EditorSelectedUnit"),
+        EditorSelectedUnit: () => import("./EditorSelectedUnit"),
     },
     mixins: [],
     props: {},

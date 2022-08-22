@@ -1,21 +1,28 @@
 <template>
-    <div class="site-plan-editor-pane q-p-sm">
+    <div class="site-plan-editor-pane q-p-sm window-height">
         <!-- Toolbar -->
         <div class="tool-bar q-px-sm q-py-md">
             <div class="row justify-end q-mb-md">
                 <q-btn color="primary">Export GeoJSON</q-btn>
             </div>
-
-            <q-uploader
-                color="primary"
-                flat
-                bordered
-                :multiple="false"
-                accept="image/*"
-                @added="imageAdded"
-                class="full-width q-mb-md"
-                label="Upload Image"
-            />
+            <q-expansion-item
+                dense-toggle
+                expand-separator
+                icon="fas fa-image"
+                label="Image Upload"
+                class="q-mb-md"
+            >
+                <q-uploader
+                    color="primary"
+                    flat
+                    bordered
+                    :multiple="false"
+                    accept="image/*"
+                    @added="imageAdded"
+                    class="full-width q-pt-md"
+                    label="Upload Image"
+                />
+            </q-expansion-item>
 
             <div class="row nowrap">
                 <q-input
@@ -61,8 +68,25 @@
                                 class="px-2"
                             >
                                 <div class="unit q-p-xs">
-                                    {{ item.plot }}
-                                    {{ item.street }}
+                                    <Unit :unit="item">
+                                        <div class="row justify-end q-mt-sm">
+                                            <q-btn
+                                                v-if="layer"
+                                                outline
+                                                color="primary"
+                                                @click="
+                                                    setSelectedLayerUnitId(
+                                                        item.id
+                                                    )
+                                                "
+                                            >
+                                                Assign
+                                                <i
+                                                    class="fas fa-chevron-right q-ml-sm"
+                                                ></i>
+                                            </q-btn>
+                                        </div>
+                                    </Unit>
                                 </div>
                             </DynamicScrollerItem>
                         </template>
@@ -75,6 +99,7 @@
 
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import Unit from "@/components/Unit";
 import { DynamicScroller, DynamicScrollerItem } from "vue-virtual-scroller";
 import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 
@@ -92,6 +117,7 @@ export default {
     components: {
         DynamicScroller,
         DynamicScrollerItem,
+        Unit,
     },
     mixins: [],
     props: {},
@@ -156,7 +182,6 @@ export default {
     display: flex;
     flex-direction: column;
     border-left: solid 1px #ddd;
-    height: 100%;
     overflow: hidden;
     .tool-bar {
         border-bottom: solid 1px #ddd;
@@ -165,16 +190,16 @@ export default {
         overflow-y: auto;
 
         &::-webkit-scrollbar {
-            width: 6px;
-            padding-left: 2px;
-            padding-right: 2px;
+            width: 8px;
+            padding-left: 4px;
+            padding-right: 4px;
         }
         &::-webkit-scrollbar-thumb {
             background-color: darkgrey;
             border-radius: 4px;
         }
         &::-webkit-scrollbar-track {
-            padding: 5px;
+            padding: 8px;
         }
 
         .unit {
