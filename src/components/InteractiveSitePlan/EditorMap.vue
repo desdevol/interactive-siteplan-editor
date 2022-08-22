@@ -93,6 +93,9 @@ export default {
                 this.addFeatures(layer);
                 this.addListeners(layer);
             });
+
+            // Default plan
+            this.applyImageToMap();
         },
 
         addFeatures(layer) {

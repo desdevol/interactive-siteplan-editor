@@ -105,7 +105,7 @@
         </div>
 
         <!-- GeoJSON Import Modal -->
-        <q-dialog v-model="importModal" persistent style="width: 600px">
+        <q-dialog v-model="importModal" persistent>
             <q-card style="min-width: 350px">
                 <q-card-section>
                     <span class="text-h6">Import GeoJSON</span>
