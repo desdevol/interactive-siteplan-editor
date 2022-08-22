@@ -3,6 +3,13 @@
         <!-- Toolbar -->
         <div class="tool-bar q-px-sm q-py-md">
             <div class="row justify-end q-mb-md">
+                <q-btn
+                    color="primary"
+                    flat
+                    class="q-mr-sm"
+                    @click="openImportGeoJsonModal"
+                    >Import GeoJSON</q-btn
+                >
                 <q-btn color="primary" @click="copyGeoJson"
                     >Export GeoJSON</q-btn
                 >
@@ -96,6 +103,39 @@
                 </div>
             </div>
         </div>
+
+        <!-- GeoJSON Import Modal -->
+        <q-dialog v-model="importModal" persistent style="width: 600px">
+            <q-card style="min-width: 350px">
+                <q-card-section>
+                    <span class="text-h6">Import GeoJSON</span>
+                </q-card-section>
+
+                <q-card-section
+                    class="q-pt-none scroll"
+                    style="max-height: 50vh"
+                >
+                    <q-input
+                        dense
+                        outlined
+                        v-model="geoJsonForImport"
+                        type="textarea"
+                    />
+                </q-card-section>
+
+                <q-separator />
+
+                <q-card-actions align="right" class="text-primary q-pa-md">
+                    <q-btn flat label="Cancel" v-close-popup />
+                    <q-btn
+                        color="primary"
+                        unelevated
+                        label="Import"
+                        @click="loadEditorConfig"
+                    />
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
     </div>
 </template>
 
@@ -106,21 +146,37 @@ import { DynamicScroller, DynamicScrollerItem } from "vue-virtual-scroller";
 import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 
 import { useClipboard } from "@vueuse/core";
+import useEditorLayer from "@/composables/useEditorLayer";
 import { debounce } from "lodash";
 import { useQuasar } from "quasar";
+import { geoJSON } from "leaflet";
 
 export default {
     setup() {
         const { copy } = useClipboard();
         const $q = useQuasar();
-        const notify = function (message) {
+        const notify = function ({ message, color }) {
             $q.notify({
                 message: message,
-                color: "#111",
+                color: color,
             });
         };
 
-        return { copy, notify };
+        const {
+            initEmptyLayerProperties,
+            setLayerStyle,
+            addListeners,
+            loadOverlayImage,
+        } = useEditorLayer();
+
+        return {
+            copy,
+            notify,
+            initEmptyLayerProperties,
+            setLayerStyle,
+            addListeners,
+            loadOverlayImage,
+        };
     },
     components: {
         DynamicScroller,
@@ -130,11 +186,15 @@ export default {
     mixins: [],
     props: {},
     data: function () {
-        return {};
+        return {
+            importModal: false,
+            geoJsonForImport: "",
+        };
     },
     computed: {
         ...mapState({
             layer: (state) => state.sitePlanEditor?.selectedLayer,
+            sitePlanMap: (state) => state.sitePlanEditor?.sitePlanMap,
             units: (state) => state.sitePlanEditor?.units,
             isUnitListInitializing: (state) =>
                 state.sitePlanEditor?.isUnitListInitializing,
@@ -184,7 +244,36 @@ export default {
         async copyGeoJson() {
             let geoJSON = await this.exportGeoJson();
             await this.copy(JSON.stringify(geoJSON, null, "\t"));
-            this.notify("GeoJSON has been copied to clipboard.");
+            this.notify({
+                message: "GeoJSON has been copied to clipboard.",
+                color: "#111",
+            });
+        },
+        openImportGeoJsonModal() {
+            this.importModal = true;
+        },
+        loadEditorConfig() {
+            try {
+                let parsed = JSON.parse(this.geoJsonForImport);
+                let importedGeoJSON = geoJSON(parsed, {
+                    onEachFeature: (feature, layer) => {
+                        this.addListeners(layer);
+                        this.setLayerStyle(layer);
+                        this.initEmptyLayerProperties(layer);
+                    },
+                });
+                importedGeoJSON.addTo(this.sitePlanMap);
+                this.importModal = false;
+                this.notify({
+                    message: "GeoJSON imported successfully",
+                    color: "positive",
+                });
+            } catch (error) {
+                this.notify({
+                    message: "Something went wrong with the importing.",
+                    color: "negative",
+                });
+            }
         },
     },
 };
