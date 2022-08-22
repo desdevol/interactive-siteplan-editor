@@ -61,11 +61,9 @@ export default {
         }),
         ...mapActions({
             applyImageToMap: "sitePlanEditor/applyImageToMap",
-            initUnits: "sitePlanEditor/initUnits",
         }),
         async init() {
             await this.initMap();
-            await this.initUnits();
             if (this.editorMode == "edit") {
                 this.loadOverlayImage(this.existingSitePlan.image);
                 this.loadEditorConfig(this.existingSitePlan.geoJson);

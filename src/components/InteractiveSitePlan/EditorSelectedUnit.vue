@@ -1,16 +1,32 @@
 <template>
-    <div class="project-interactive-site-plan-editor--selected-unit">
-        <Unit v-if="selectedUnit" class="selected-unit" :unit="selectedUnit">
-        </Unit>
+    <div class="interactive-site-plan-editor--selected-unit">
+        <q-expansion-item dense-toggle expand-separator label="Selected Unit">
+            <Unit
+                v-if="selectedUnit"
+                class="selected-unit"
+                :unit="selectedUnit"
+            >
+                <div class="row justify-end">
+                    <q-btn
+                        color="negative"
+                        flat
+                        @click="removeSelectedLayerUnitId"
+                    >
+                        <i class="fas fa-trash"></i>
+                    </q-btn>
+                </div>
+            </Unit>
+        </q-expansion-item>
     </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
+import Unit from "@/components/Unit";
 
 export default {
     components: {
-        Unit: () => import("@/components/Unit"),
+        Unit,
     },
     mixins: [],
     props: {},
@@ -36,7 +52,7 @@ export default {
 </script>
 
 <style lang="scss">
-.project-interactive-site-plan-editor--selected-unit {
+.interactive-site-plan-editor--selected-unit {
     position: absolute;
     right: 10px;
     bottom: 10px;

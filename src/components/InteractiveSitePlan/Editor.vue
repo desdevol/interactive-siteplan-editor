@@ -18,12 +18,13 @@
 <script>
 import EditorMap from "./EditorMap";
 import EditorPane from "./EditorPane";
+import EditorSelectedUnit from "./EditorSelectedUnit";
 
 export default {
     components: {
         EditorMap,
         EditorPane,
-        EditorSelectedUnit: () => import("./EditorSelectedUnit"),
+        EditorSelectedUnit,
     },
     mixins: [],
     props: {},
