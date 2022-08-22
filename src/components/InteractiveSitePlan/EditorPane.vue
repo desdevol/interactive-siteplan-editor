@@ -3,7 +3,9 @@
         <!-- Toolbar -->
         <div class="tool-bar q-px-sm q-py-md">
             <div class="row justify-end q-mb-md">
-                <q-btn color="primary">Export GeoJSON</q-btn>
+                <q-btn color="primary" @click="copyGeoJson"
+                    >Export GeoJSON</q-btn
+                >
             </div>
             <q-expansion-item
                 dense-toggle
@@ -103,16 +105,22 @@ import Unit from "@/components/Unit";
 import { DynamicScroller, DynamicScrollerItem } from "vue-virtual-scroller";
 import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 
-import { ref } from "vue";
 import { useClipboard } from "@vueuse/core";
 import { debounce } from "lodash";
+import { useQuasar } from "quasar";
 
 export default {
     setup() {
-        const geoJSON = ref("");
-        const { copy } = useClipboard({ geoJSON });
+        const { copy } = useClipboard();
+        const $q = useQuasar();
+        const notify = function (message) {
+            $q.notify({
+                message: message,
+                color: "#111",
+            });
+        };
 
-        return { geoJSON, copy };
+        return { copy, notify };
     },
     components: {
         DynamicScroller,
@@ -172,6 +180,11 @@ export default {
             let url = URL.createObjectURL(files[0]);
             this.sitePlanImage = url;
             this.applyImageToMap();
+        },
+        async copyGeoJson() {
+            let geoJSON = await this.exportGeoJson();
+            await this.copy(JSON.stringify(geoJSON, null, "\t"));
+            this.notify("GeoJSON has been copied to clipboard.");
         },
     },
 };
